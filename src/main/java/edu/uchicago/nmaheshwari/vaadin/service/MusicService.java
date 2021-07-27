@@ -20,7 +20,6 @@ public class MusicService {
         String host = "deezerdevs-deezer.p.rapidapi.co";
 
         String formatted = String.format(BASE, search);
-        System.out.println(formatted);
         RequestHeadersSpec<?> spec = WebClient.create().get().uri(formatted);
         spec.header("x-rapidapi-host", host);
         spec.header("x-rapidapi-key", key);
@@ -28,7 +27,7 @@ public class MusicService {
         spec.retrieve().toEntity(MusicResponse.class).subscribe(result -> {
             final MusicResponse musicResponse = result.getBody();
 
-            System.out.println(musicResponse.getTotal());
+            //System.out.println("Total Results: " +musicResponse.getTotal());
             if(null==musicResponse.getData()){
                 System.out.println("No results");
                 return;

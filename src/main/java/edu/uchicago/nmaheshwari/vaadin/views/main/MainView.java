@@ -1,72 +1,43 @@
-package edu.uchicago.nmaheshwari.vaadin.views;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+package edu.uchicago.nmaheshwari.vaadin.views.main;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
-import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.PageTitle;
-import edu.uchicago.nmaheshwari.vaadin.views.MainLayout;
-import edu.uchicago.nmaheshwari.vaadin.views.musiclist.MusicListView;
-import edu.uchicago.nmaheshwari.vaadin.views.about.AboutView;
+import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
-import com.vaadin.flow.component.avatar.Avatar;
+import edu.uchicago.nmaheshwari.vaadin.views.about.AboutView;
+import edu.uchicago.nmaheshwari.vaadin.views.musiclist.MusicListView;
+
+import java.util.Optional;
 
 /**
  * The main view is a top-level placeholder for other views.
  */
-@PWA(name = "Music Finder", shortName = "Music Finder", enableInstallPrompt = false)
-@Theme(themeFolder = "musicfinder", variant = Lumo.DARK)
-@PageTitle("Main")
-public class MainLayout extends AppLayout {
-
-    public static class MenuItemInfo {
-
-        private String text;
-        private String iconClass;
-        private Class<? extends Component> view;
-
-        public MenuItemInfo(String text, String iconClass, Class<? extends Component> view) {
-            this.text = text;
-            this.iconClass = iconClass;
-            this.view = view;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public String getIconClass() {
-            return iconClass;
-        }
-
-        public Class<? extends Component> getView() {
-            return view;
-        }
-
-    }
+@Push
+@PWA(name = "My App", shortName = "My App", enableInstallPrompt = false)
+@JsModule("./styles/shared-styles.js")
+@Theme(value = Lumo.class, variant = Lumo.DARK)
+public class MainView extends AppLayout {
 
     private final Tabs menu;
     private H1 viewTitle;
 
-    public MainLayout() {
+    public MainView() {
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         menu = createMenu();
@@ -75,7 +46,7 @@ public class MainLayout extends AppLayout {
 
     private Component createHeaderContent() {
         HorizontalLayout layout = new HorizontalLayout();
-        layout.setClassName("sidemenu-header");
+        layout.setId("header");
         layout.getThemeList().set("dark", true);
         layout.setWidthFull();
         layout.setSpacing(false);
@@ -83,17 +54,12 @@ public class MainLayout extends AppLayout {
         layout.add(new DrawerToggle());
         viewTitle = new H1();
         layout.add(viewTitle);
-
-        Avatar avatar = new Avatar();
-        avatar.addClassNames("ms-auto", "me-m");
-        layout.add(avatar);
-
+        layout.add(new Avatar());
         return layout;
     }
 
     private Component createDrawerContent(Tabs menu) {
         VerticalLayout layout = new VerticalLayout();
-        layout.setClassName("sidemenu-menu");
         layout.setSizeFull();
         layout.setPadding(false);
         layout.setSpacing(false);
@@ -102,8 +68,8 @@ public class MainLayout extends AppLayout {
         HorizontalLayout logoLayout = new HorizontalLayout();
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        logoLayout.add(new Image("images/logo.png", "Music Finder logo"));
-        logoLayout.add(new H1("Music Finder"));
+        logoLayout.add(new Image("images/logo.png", "My App logo"));
+        logoLayout.add(new H1("Vaadin Book Search"));
         layout.add(logoLayout, menu);
         return layout;
     }
@@ -113,39 +79,18 @@ public class MainLayout extends AppLayout {
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         tabs.addThemeVariants(TabsVariant.LUMO_MINIMAL);
         tabs.setId("tabs");
-        for (Tab menuTab : createMenuItems()) {
-            tabs.add(menuTab);
-        }
+        tabs.add(createMenuItems());
         return tabs;
     }
 
-    private List<Tab> createMenuItems() {
-        MenuItemInfo[] menuItems = new MenuItemInfo[]{ //
-                new MenuItemInfo("Music List", "la la-list", MusicListView.class), //
-
-                new MenuItemInfo("About", "la la-file", AboutView.class), //
-
-        };
-        List<Tab> tabs = new ArrayList<>();
-        for (MenuItemInfo menuItemInfo : menuItems) {
-            tabs.add(createTab(menuItemInfo));
-
-        }
-        return tabs;
+    private Component[] createMenuItems() {
+        return new Tab[]{createTab("Music List", MusicListView.class), createTab("About", AboutView.class)};
     }
 
-    private static Tab createTab(MenuItemInfo menuItemInfo) {
-        Tab tab = new Tab();
-        RouterLink link = new RouterLink();
-        link.setRoute(menuItemInfo.getView());
-        Span iconElement = new Span();
-        iconElement.addClassNames("text-l", "pr-s");
-        if (!menuItemInfo.getIconClass().isEmpty()) {
-            iconElement.addClassNames(menuItemInfo.getIconClass());
-        }
-        link.add(iconElement, new Text(menuItemInfo.getText()));
-        tab.add(link);
-        ComponentUtil.setData(tab, Class.class, menuItemInfo.getView());
+    private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
+        final Tab tab = new Tab();
+        tab.add(new RouterLink(text, navigationTarget));
+        ComponentUtil.setData(tab, Class.class, navigationTarget);
         return tab;
     }
 
