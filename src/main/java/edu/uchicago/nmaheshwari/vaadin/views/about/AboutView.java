@@ -1,25 +1,19 @@
 package edu.uchicago.nmaheshwari.vaadin.views.about;
 
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import edu.uchicago.nmaheshwari.vaadin.views.main.MainView;
-import org.apache.commons.lang3.StringUtils;
+import edu.uchicago.nmaheshwari.vaadin.views.main.MainLayout;
 
-@Route(value = "about", layout = MainView.class)
-@PageTitle("About Us")
+@Route(value = "about", layout = MainLayout.class)
+@PageTitle("About This App")
+@CssImport("./views/about/about-view.css")
 public class AboutView extends Div {
 
     private TextField subject = new TextField("Subject");
@@ -33,13 +27,14 @@ public class AboutView extends Div {
         // body.addClassName("message");
 
 
-        Span description = new Span("Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+        Span description = new Span("This app allows you to search for any artist or song! Simply go to the " +
+                "'Music List' tab and enter the name of the song or artist and hit [ENTER] to get listening!");
         description.addClassName("text");
 
-        add(description, createTitle(), createFormLayout(), createButtonLayout());
+        add(description);
 
 
-        send.addClickListener(e -> {
+        /*send.addClickListener(e -> {
             if (subject.isEmpty() || body.isEmpty()) {
                 openWarning("Fields cannot be blank");
             } else {
@@ -47,7 +42,7 @@ public class AboutView extends Div {
                 clearFields();
 
             }
-        });
+        });*/
 
     }
 
@@ -55,7 +50,7 @@ public class AboutView extends Div {
         subject.setValue("");
         body.setValue("");
     }
-
+/*
     public void sendEmail(String subject, String message)  {
         Notification success = new Notification(new Html(String.format(
                 "<div class='email-sent-success'><h3>Successfully Sent Message</h3><h4>%s</h4><p>%s</p><div/>", subject,
@@ -95,7 +90,7 @@ public class AboutView extends Div {
                 openWarning("Failed to send email!");
             }
 
-        }*/
+        }
     }
 
     public void openWarning(String errorMsg) {
@@ -123,6 +118,6 @@ public class AboutView extends Div {
         send.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         buttonLayout.add(send);
         return buttonLayout;
-    }
+    }*/
 
 }

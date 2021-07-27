@@ -2,6 +2,7 @@ package edu.uchicago.nmaheshwari.vaadin.views.musiclist;
 
 import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.ItemClickEvent;
@@ -11,30 +12,52 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 import edu.uchicago.nmaheshwari.vaadin.models.Datum;
 import edu.uchicago.nmaheshwari.vaadin.service.MusicService;
-import edu.uchicago.nmaheshwari.vaadin.views.main.MainView;
+import edu.uchicago.nmaheshwari.vaadin.views.main.MainLayout;
 import elemental.json.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @PageTitle("Music List")
-@Route(value = "music", layout = MainView.class)
-@RouteAlias(value = "", layout = MainView.class)
+@Route(value = "music", layout = MainLayout.class)
+@RouteAlias(value = "", layout = MainLayout.class)
+@CssImport("./views/cardlist/card-list-view.css")
 public class MusicListView extends Div implements AfterNavigationObserver {
 
     private MusicService musicService;
     Grid<Datum> grid = new Grid<>();
     private boolean isLoading = false;
     private List<Datum> results;
+    private int index = 25; //fetch 25 results at a time
 
-    private Notification notification = new Notification("Loading...", 500, Notification.Position.TOP_CENTER);
+    private Notification loading = new Notification("Loading...", 500, Notification.Position.MIDDLE);
+    private Notification done = new Notification("Done Loading!", 1500, Notification.Position.BOTTOM_CENTER);
 
+    private TextField searchField;
+    private String searchTerm;
 
     public MusicListView(MusicService musicService) {
         this.musicService = musicService;
+        searchField = new TextField();
+        searchField.setLabel("Search term");
+        searchField.setPlaceholder("search...");
+        searchField.setAutofocus(true);
+        searchField.setWidthFull();
+        searchField.addKeyDownListener(keyDownEvent -> {
+            String keyStroke = keyDownEvent.getKey().getKeys().toString();
+            if(keyStroke.equals("[Enter]") && !isLoading){
+                System.out.println("Search term:  "+ searchField.getValue());
+                searchTerm = searchField.getValue();
+                index =25;
+                results.clear();
+                getMusic(searchTerm);
+            }
+        });
+
         addClassName("music-list-view");
         setSizeFull();
         grid.setHeight("100%");
@@ -47,9 +70,7 @@ public class MusicListView extends Div implements AfterNavigationObserver {
             }
         });
 
-
-
-        add(grid);
+        add(searchField, withClientsideScrollListener(grid));
     }
 
     private Grid<Datum> withClientsideScrollListener(Grid<Datum> grid) {
@@ -74,7 +95,7 @@ public class MusicListView extends Div implements AfterNavigationObserver {
         if (percentage == 1.0) {
 
             if (!isLoading) {
-                getMusic();
+                getMusic(searchTerm);
             }
             grid.scrollToIndex(results.size() / 2);
 
@@ -100,16 +121,25 @@ public class MusicListView extends Div implements AfterNavigationObserver {
         header.setSpacing(false);
         header.getThemeList().add("spacing-s");
 
-        Span albumName = new Span(data.getAlbum().getTitle());
+        Span songName = new Span("Song: " + data.getTitle());
+        songName.addClassName("songName");
+        Span albumName = new Span("|  Album: "+data.getAlbum().getTitle());
         albumName.addClassName("albumName");
-        Span artistName = new Span("by " + data.getArtist().getName());
+        header.add(songName, albumName);
+
+        Span artistName = new Span("Performed by " + data.getArtist().getName());
         artistName.addClassName("artistName");
-        header.add(albumName, artistName);
-
-        Span id = new Span("ID: "+String.valueOf(data.getId()));
 
 
-        id.addClassName("id");
+        Span duration = new Span("Duration: "+data.getDuration() + "s");
+        duration.addClassName("duration");
+
+        Span link = new Span("Link: "+ data.getLink());
+        duration.addClassName("link");
+
+        Span rank = new Span("Deezer Rank: "+data.getRank());
+        duration.addClassName("rank");
+
 
         HorizontalLayout actions = new HorizontalLayout();
         actions.addClassName("actions");
@@ -117,7 +147,7 @@ public class MusicListView extends Div implements AfterNavigationObserver {
         actions.getThemeList().add("spacing-s");
 
 
-        description.add(header, id, actions);
+        description.add(header, artistName, link, duration, rank, actions);
         card.add(image, description);
         return card;
     }
@@ -126,19 +156,24 @@ public class MusicListView extends Div implements AfterNavigationObserver {
     public void afterNavigation(AfterNavigationEvent event) {
 
         results = new ArrayList<>();
-        getMusic();
+        //getMusic(searchTerm);
 
     }
 
-    private void getMusic(){
-        notification.open();
+    private void getMusic(String searchTerm){
+        isLoading = true;
+        loading.open();
+
         musicService.getMusic(result -> getUI().get().access(() -> {
             results.addAll(result);
-
             //result.stream().forEach(System.out::println); //print data to console
-
             grid.setItems(results);
-        }), "eminem");
+            done.open();
+            index = index +25; //increment count by 25
+            isLoading = false;
+            getUI().get().push();
+
+        }), searchTerm, index);
     }
 
 

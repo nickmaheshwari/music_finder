@@ -5,6 +5,7 @@ import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
@@ -29,15 +30,16 @@ import java.util.Optional;
  * The main view is a top-level placeholder for other views.
  */
 @Push
-@PWA(name = "My App", shortName = "My App", enableInstallPrompt = false)
+@PWA(name = "Music Finder", shortName = "Music Finder", enableInstallPrompt = false)
 @JsModule("./styles/shared-styles.js")
+@CssImport("./views/main/main-view.css")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
-public class MainView extends AppLayout {
+public class MainLayout extends AppLayout {
 
     private final Tabs menu;
     private H1 viewTitle;
 
-    public MainView() {
+    public MainLayout() {
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         menu = createMenu();
@@ -68,8 +70,8 @@ public class MainView extends AppLayout {
         HorizontalLayout logoLayout = new HorizontalLayout();
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        logoLayout.add(new Image("images/logo.png", "My App logo"));
-        logoLayout.add(new H1("Vaadin Book Search"));
+        logoLayout.add(new Image("images/music.png", "My App logo"));
+        logoLayout.add(new H1("Music Finder"));
         layout.add(logoLayout, menu);
         return layout;
     }
@@ -84,7 +86,7 @@ public class MainView extends AppLayout {
     }
 
     private Component[] createMenuItems() {
-        return new Tab[]{createTab("Music List", MusicListView.class), createTab("About", AboutView.class)};
+        return new Tab[]{createTab("Music List", MusicListView.class), createTab("About App", AboutView.class)};
     }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
