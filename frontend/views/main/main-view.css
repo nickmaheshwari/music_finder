@@ -36,11 +36,12 @@ vaadin-tab {
 }
 
 vaadin-tab:hover {
-    background-color: var(--lumo-contrast-5pct);
+    background-color: var(--lumo-base-color);
 }
 
 vaadin-tab[selected] {
 
-    background-color: var(--lumo-primary-color-10pct);
+    background-color: var(--lumo-base-color);
     color: var(--lumo-primary-text-color);
 }
+
