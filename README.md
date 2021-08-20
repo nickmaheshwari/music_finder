@@ -1,5 +1,16 @@
 # Music Finder
 
+This Vaadin project uses Deezers Music Search API (https://developers.deezer.com/api/search) to concurrently
+return a pagable, infinite scroll (until all results have been scrolled) list of cards, providing
+feedback with 'Loading' and 'Done loading' messages. It takes in a search term as a query and 
+implements paging by 
+using an index (25 results per'page'). This project impliments a toggle-able menu with the music 
+search tab and the about app tab.
+
+
+
+# Vaadin Auto-generated Docs:
+
 This project can be used as a starting point to create your own Vaadin application with Spring Boot.
 It contains all the necessary configuration and some placeholder files to get you started.
 
