@@ -23,6 +23,7 @@ Once the JAR file is built, you can run it using
 `myapp-1.0-SNAPSHOT.jar` with the name of your jar).
 
 ## Project structure
+-tracked by master repo
 
 - `MainView.java` in `src/main/java` contains the navigation setup (i.e., the 
   side/top bar and the main menu). This setup uses 
