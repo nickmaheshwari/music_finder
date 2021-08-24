@@ -1,17 +1,25 @@
 package edu.uchicago.nmaheshwari.vaadin.views.about;
 
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import edu.uchicago.nmaheshwari.vaadin.views.main.MainLayout;
+import edu.uchicago.nmaheshwari.vaadin.views.main.MainView;
+import org.apache.commons.lang3.StringUtils;
 
-@Route(value = "about", layout = MainLayout.class)
+@Route(value = "about", layout = MainView.class)
 @PageTitle("About This App")
 @CssImport("./views/about/about-view.css")
 public class AboutView extends Div {
@@ -31,10 +39,10 @@ public class AboutView extends Div {
                 "'Music List' tab and enter the name of the song or artist and hit [ENTER] to get listening!");
         description.addClassName("text");
 
-        add(description);
+        add(description, createTitle(), createFormLayout(), createButtonLayout());
 
 
-        /*send.addClickListener(e -> {
+        send.addClickListener(e -> {
             if (subject.isEmpty() || body.isEmpty()) {
                 openWarning("Fields cannot be blank");
             } else {
@@ -42,7 +50,7 @@ public class AboutView extends Div {
                 clearFields();
 
             }
-        });*/
+        });
 
     }
 
@@ -50,7 +58,7 @@ public class AboutView extends Div {
         subject.setValue("");
         body.setValue("");
     }
-/*
+
     public void sendEmail(String subject, String message)  {
         Notification success = new Notification(new Html(String.format(
                 "<div class='email-sent-success'><h3>Successfully Sent Message</h3><h4>%s</h4><p>%s</p><div/>", subject,
@@ -90,7 +98,7 @@ public class AboutView extends Div {
                 openWarning("Failed to send email!");
             }
 
-        }
+        }*/
     }
 
     public void openWarning(String errorMsg) {
@@ -118,6 +126,6 @@ public class AboutView extends Div {
         send.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         buttonLayout.add(send);
         return buttonLayout;
-    }*/
+    }
 
 }

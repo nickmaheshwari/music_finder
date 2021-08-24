@@ -1,0 +1,46 @@
+.detail {
+    display: block;
+}
+
+.detail img {
+    object-fit: fill;
+    height: 300px;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-left: 40px;
+    width: 210px;
+}
+
+.detail .vertical-layout {
+    margin-top: 5px;
+    margin-left: 25px;
+}
+
+.detail .text {
+    margin-right: 40px;
+    line-height: normal;
+}
+
+.detail .title, .card .title {
+    font-weight: bold;
+}
+
+.detail .tab, .card .tab {
+    background-color: yellow;
+}
+
+.detail .tab {
+    height: 30px;
+    margin-right: 40px;
+    margin-top: 10px;
+    margin-left: 40px;
+    visibility: hidden;
+}
+
+.detail.fav-mode .tab {
+    visibility: visible;
+}
+
+.card .tab {
+    width: 10px;
+}

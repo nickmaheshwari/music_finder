@@ -1,0 +1,16 @@
+.detail-wrap {
+    display: block;
+    height: 94%;
+}
+
+.detail-wrap .red-button {
+    background-color: orangered;
+}
+
+.detail-wrap .green-button {
+    background-color: green;
+}
+
+.detail-wrap .button-layout {
+    margin-left: 40px;
+}
