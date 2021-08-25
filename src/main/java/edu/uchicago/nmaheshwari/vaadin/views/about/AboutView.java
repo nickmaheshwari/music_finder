@@ -16,6 +16,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import edu.uchicago.nmaheshwari.vaadin.cache.Cache;
 import edu.uchicago.nmaheshwari.vaadin.views.main.MainView;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -37,7 +38,7 @@ public class AboutView extends Div {
     private TextField subject = new TextField("Subject");
     private TextArea body = new TextArea("Message");
     private Button send = new Button("Send");
-    private String emailBaseUrl = "https://soy64ubws6.execute-api.us-east-1.amazonaws.com/Prod";
+    private String emailBaseUrl = "https://soy64ubws6.execute-api.us-east-1.amazonaws.com/Prod/mail";
 
     private Logger log = LoggerFactory.getLogger(getClass());
     private final ExecutorService executorService = Executors.newFixedThreadPool(3);
@@ -85,9 +86,11 @@ public class AboutView extends Div {
 
         success.open();
 
+        String emailFrom = Cache.getInstance().getEmail();
+        String bodyPkg = String.format("{\r\n    \"emailFrom\": \"%s\",\r\n    \"subject\": \"%s\",\r\n    \"body\": \"%s\"\r\n}", emailFrom, subject, message);
        Mono<String> k = WebClient.create().post()
                 .uri(emailBaseUrl)
-                .body(Mono.just(message), String.class)
+                .body(Mono.just(bodyPkg), String.class)
                 .retrieve()
                 .bodyToMono(String.class);
 
