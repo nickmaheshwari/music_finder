@@ -46,13 +46,13 @@ public class SharedViews {
         duration.addClassName("duration");
 
         Span link = new Span("Link: "+ favorite.getLink());
-        duration.addClassName("link");
+        link.addClassName("link");
 
         Span rank = new Span("Deezer Rank: "+favorite.getRank());
-        duration.addClassName("rank");
+        rank.addClassName("rank");
 
         Span email = new Span("Song Favorited By: "+favorite.getUserEmail());
-        duration.addClassName("email");
+        email.addClassName("email");
 
         if (favMode) {
             detail.addClassName("fav-mode");
@@ -96,20 +96,20 @@ public class SharedViews {
         duration.addClassName("duration");
 
         Span link = new Span("Link: "+ favorite.getLink());
-        duration.addClassName("link");
+        link.addClassName("link");
 
         Span rank = new Span("Deezer Rank: "+favorite.getRank());
-        duration.addClassName("rank");
+        rank.addClassName("rank");
 
         Span email = new Span("Song Favorited By: "+favorite.getUserEmail());
-        duration.addClassName("email");
+        email.addClassName("email");
 
 
         if (favMode) {
-            verticalLayout.add(songName, albumName, artistName, duration, link, rank, email);
+            verticalLayout.add(songName, albumName, artistName, duration, email);
             card.add(tab, image, verticalLayout);
         } else {
-            verticalLayout.add(songName, albumName, artistName, duration, link, rank);
+            verticalLayout.add(songName, albumName, artistName, duration);
             card.add(image, verticalLayout);
         }
 

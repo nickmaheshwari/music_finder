@@ -6,7 +6,9 @@ import com.vaadin.flow.component.notification.Notification;
 import edu.uchicago.nmaheshwari.vaadin.cache.Cache;
 import edu.uchicago.nmaheshwari.vaadin.models.FavoriteItem;
 import edu.uchicago.nmaheshwari.vaadin.service.ResponseCallback;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -25,14 +27,21 @@ public class FavsRepo {
     //make sure to add your full container-url-connection-string to the IntelliJ confuguration
     //QUARKUS_BASE_URL :: https://container-service-22.9r4o895c5nvr8.us-east-2.cs.amazonlightsail.com/
     //If you are deploying to beanstalk, place in software || environmental properties.
-    @Value("${QUARKUS_BASE_URL:#{'localhost:8888/'}}")
-    private String baseUrl;
+
+    /*@Value("${QUARKUS_BASE_URL:#{'http://localhost:8888'}}")
+    private String BASE;*/
+
+    private final String BASE = "https://mongo-quarkus-service.jknaogg1e92k6.us-east-2.cs.amazonlightsail.com/";
+
+
+    private Logger log = LoggerFactory.getLogger(getClass());
+
 
     public void getFavoritesPaged(ResponseCallback<List<FavoriteItem>> callback, int page) {
 
         String email = Cache.getInstance().getEmail();
 
-        String raw = baseUrl + "/wish/paged/" + email + "/%d";
+        String raw = BASE + "/favs/paged/" + email + "/%d";
         String formatted = String.format(raw, page);
         WebClient.RequestHeadersSpec<?> spec = WebClient.create().get()
                 .uri(formatted);
@@ -45,7 +54,7 @@ public class FavsRepo {
     public void deleteFavoriteById(UI ui, ResponseCallback<FavoriteItem> callback, String id) {
 
         String email = Cache.getInstance().getEmail();
-        String raw = baseUrl + "/wish/" + email + "/%s";
+        String raw = BASE + "/favs/delete/" + email + "/%s";
         String formatted = String.format(raw, id);
         Mono<FavoriteItem> mono = WebClient.create().delete()
                 .uri(formatted)
@@ -66,7 +75,7 @@ public class FavsRepo {
 
     public void addFavorite(UI ui, ResponseCallback<FavoriteItem> callback, FavoriteItem favoriteAdd) {
 
-        String formatted = baseUrl + "/wish";
+        String formatted = BASE + "/favs";
         Mono<FavoriteItem> mono = WebClient.create().post()
 
                 .uri(formatted)
@@ -76,6 +85,8 @@ public class FavsRepo {
 
         mono
                 .doOnError(throwable -> {
+
+                    log.error("Error received: " + ExceptionUtils.getStackTrace(throwable));
                     String message = "";
                     switch (((WebClientResponseException.UnsupportedMediaType) throwable).getStatusCode().value()){
                         case 415:

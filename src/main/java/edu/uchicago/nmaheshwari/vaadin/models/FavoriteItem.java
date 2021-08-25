@@ -23,7 +23,7 @@ public class FavoriteItem implements Serializable {
         favoriteItem.setId(null == datum.getId() ? "": String.valueOf(datum.getId()));
         favoriteItem.setTitle(datum.getTitle());
         favoriteItem.setCover(datum.getAlbum().getCover());
-        favoriteItem.setDuration(String.valueOf(datum.getDuration()) + "s");
+        favoriteItem.setDuration(datum.getDuration() + "s");
         favoriteItem.setRank(String.valueOf(datum.getRank()));
         favoriteItem.setAlbum(datum.getAlbum().getTitle());
         favoriteItem.setLink(datum.getLink());

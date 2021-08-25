@@ -6,7 +6,6 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -14,9 +13,9 @@ import com.vaadin.flow.router.Route;
 import edu.uchicago.nmaheshwari.vaadin.cache.Cache;
 import edu.uchicago.nmaheshwari.vaadin.models.FavoriteItem;
 import edu.uchicago.nmaheshwari.vaadin.service.FavoritesService;
-import edu.uchicago.nmaheshwari.vaadin.utils.Utils;
 import edu.uchicago.nmaheshwari.vaadin.views.main.MainView;
 import edu.uchicago.nmaheshwari.vaadin.views.shared.SharedViews;
+import elemental.json.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,45 +66,48 @@ public class FavoritesView extends Div implements AfterNavigationObserver {
         favoritesService.getFavoritesPaged(favoriteResponse -> {
             getUI().get().access(() -> {
 
-                int size = favoriteResponse.size();
-                switch (size){
-                    case 0:
-                        isLoading = false;
-                        isEnd = true;
-                        return;
-                    case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11: case 12
-                            : case 13: case 14: case 15: case 16: case 17: case 18: case 19:
-                        addItemsToGrid(favoriteResponse, size);
-                        isEnd = true;
-                        break;
-                    case 20:
-                    default:
-                        addItemsToGrid(favoriteResponse, size);
-                        page++;
-                        break;
+                favoriteItems.addAll(favoriteResponse);
+                grid.setItems(favoriteItems);
 
+                if (favoriteResponse.size() < MAX_RESULTS){
+                    isEnd = true;
+                } else {
+                    page++;
                 }
+
                 isLoading = false;
                 getUI().get().push();
             });
         }, page);
     }
 
-    private void addItemsToGrid(List<FavoriteItem> favoriteResponse, int size) {
-        favoriteItems.addAll(favoriteResponse);
-        grid.setItems(favoriteItems.stream());
-        if (page > 1) {
-            new Notification("Loading page " + page + " with " + size + (size == 1 ? " song." : " songs."),
-                    1000,
-                    Notification.Position.BOTTOM_CENTER).open();
-        }
-    }
-
     private Grid<FavoriteItem> withClientsideScrollListener(Grid<FavoriteItem> grid) {
         grid.getElement().executeJs(
-                Utils.getFileFromResourceAsString(this.getClass(), "scrollFunction.js"),
+                "this.$.scroller.addEventListener('scroll', (scrollEvent) => " +
+                        "{requestAnimationFrame(" +
+                        "() => $0.$server.onGridScroll({sh: this.$.table.scrollHeight, " +
+                        "ch: this.$.table.clientHeight, " +
+                        "st: this.$.table.scrollTop}))},true)",
                 getElement());
         return grid;
+    }
+
+    @ClientCallable
+    public void onGridScroll(JsonObject scrollEvent) {
+        int scrollHeight = (int) scrollEvent.getNumber("sh");
+        int clientHeight = (int) scrollEvent.getNumber("ch");
+        int scrollTop = (int) scrollEvent.getNumber("st");
+        double percentage = (double) scrollTop / (scrollHeight - clientHeight);
+        System.out.println("scroll percentage " + percentage);
+        //reached almost the bottom of the scroll
+        if (percentage >= 0.95) {
+            System.out.println("Reached bottom");
+            if (!isLoading) {
+                System.out.println("Paging...");
+                getFavoritesPaged();
+            }
+        }
+
     }
 
 

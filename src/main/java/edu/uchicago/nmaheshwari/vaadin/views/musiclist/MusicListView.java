@@ -34,7 +34,7 @@ public class MusicListView extends Div implements AfterNavigationObserver {
 
         keyWord = new TextField();
         keyWord.setLabel("Search Term");
-        keyWord.setPlaceholder("type search-term, then press [ENTER]");
+        keyWord.setPlaceholder("Enter the name of a song or artist you want to hear and press 'Enter' to getting listening!");
         keyWord.setAutofocus(true);
         keyWord.addKeyDownListener(keyDownEvent -> {
                     String keyStroke = keyDownEvent.getKey().getKeys().toString();

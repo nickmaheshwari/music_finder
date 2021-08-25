@@ -20,7 +20,6 @@ import edu.uchicago.nmaheshwari.vaadin.views.shared.SharedViews;
 import java.awt.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 @Route(value = "detail-view", layout = MainView.class)
 @PageTitle("Music Detail")
@@ -65,19 +64,17 @@ public class DetailView extends Div {
                         }
                 ));
 
-        /*goToLink.setText("Go to Song's Deezer Page");
+        goToLink.setText("Go to Song's Deezer Page");
         goToLink.addClickListener(
                 e -> goToLink.getUI().ifPresent(ui -> {
                     URI uri = null;
                     try {
-                        uri = new URL(Cache.getInstance().getDetailItem().getLink()).toURI();
+                        uri = new URI(Cache.getInstance().getDetailItem().getLink());
                     } catch (URISyntaxException uriSyntaxException) {
                         uriSyntaxException.printStackTrace();
-                    } catch (MalformedURLException malformedURLException) {
-                        malformedURLException.printStackTrace();
                     }
-                    openWebpage(uri);
-                }));*/
+                    openWebpage(Cache.getInstance().getDetailItem().getLink());
+                }));
     }
 
     public void addFavorite(FavoriteItem favorite) {
@@ -106,16 +103,18 @@ public class DetailView extends Div {
         buttonLayout.addClassName("button-layout");
         favoriteAction.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         buttonLayout.add(favoriteAction);
-      //  buttonLayout.add(goToLink);
+       // buttonLayout.add(goToLink);
         buttonLayout.add(goBack);
         return buttonLayout;
     }
 
-    public static boolean openWebpage(URI uri) {
+    public static boolean openWebpage(String link) {
         Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
         if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
             try {
+                URI uri = new URI(link);
                 desktop.browse(uri);
+
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -124,13 +123,6 @@ public class DetailView extends Div {
         return false;
     }
 
-    public static boolean openWebpage(URL url) {
-        try {
-            return openWebpage(url.toURI());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+
 
 }

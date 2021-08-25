@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-musicfinderfinal-dev-225126-authRole",
+      "UnauthRoleArn": "arn:aws:iam::020328446654:role/amplify-musicfinderfinal-dev-225126-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::020328446654:role/amplify-musicfinderfinal-dev-225126-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-musicfinderfinal-dev-225126-deployment",
+      "UnauthRoleName": "amplify-musicfinderfinal-dev-225126-unauthRole",
+      "StackName": "amplify-musicfinderfinal-dev-225126",
+      "StackId": "arn:aws:cloudformation:us-east-1:020328446654:stack/amplify-musicfinderfinal-dev-225126/53a360d0-049f-11ec-a86e-0e449a166b2f",
+      "AmplifyAppId": "d2jeurlv0rp8dv"
+    },
+    "categories": {
+      "auth": {
+        "musicfinderfinal6633b0d3": {}
+      }
+    }
+  }
+}
