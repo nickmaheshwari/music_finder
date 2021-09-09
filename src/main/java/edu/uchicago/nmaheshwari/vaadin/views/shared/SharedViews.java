@@ -56,9 +56,9 @@ public class SharedViews {
 
         if (favMode) {
             detail.addClassName("fav-mode");
-            verticalLayout.add(songName, albumName, artistName, duration, link, rank, email);
+            verticalLayout.add(songName, albumName, artistName, duration, link,  rank, email);
         } else {
-            verticalLayout.add(songName, albumName, artistName, duration, link, rank);
+            verticalLayout.add(songName, albumName, artistName, duration, link,  rank);
         }
         detail.add(tab, image, verticalLayout);
 

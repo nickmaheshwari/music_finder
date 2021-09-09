@@ -1,5 +1,6 @@
 # Music Finder
 
+About:
 This Vaadin project uses Deezers Music Search API (https://developers.deezer.com/api/search) to concurrently
 return a pagable, infinite scroll (until all results have been scrolled) list of cards, providing
 feedback with 'Loading' and 'Done loading' messages. It takes in a search term as a query and 
