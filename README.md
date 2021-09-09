@@ -13,6 +13,8 @@ It also implements AWS Cognito User Pools to handle sign in/out, and utilizes a 
 that contains a Quarkus microservice which connects to a MongoDB to manage different user's 'Favorites'.
 
 
+Diagram of project structure: 
+![alt text](https://ibb.co/9HXHX15)
 
 
 
