@@ -9,6 +9,12 @@ using an index (25 results per'page'). This project impliments a toggle-able men
 search tab and the about app tab.
 
 
+It also implements AWS Cognito User Pools to handle sign in/out, and utilizes a docker container hosted on AWS Lightsail 
+that contains a Quarkus microservice which connects to a MongoDB to manage different user's 'Favorites'.
+
+
+
+
 
 # Vaadin Auto-generated Docs:
 
