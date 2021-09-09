@@ -14,7 +14,7 @@ that contains a Quarkus microservice which connects to a MongoDB to manage diffe
 
 
 Diagram of project structure: 
-![alt text](https://ibb.co/9HXHX15)
+![alt text]https://ibb.co/9HXHX15
 
 
 
