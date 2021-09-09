@@ -14,7 +14,6 @@ that contains a Quarkus microservice which connects to a MongoDB to manage diffe
 (deployed via AWS Lambda and called through APIGateway) to send an email from the signed in user (or default@default.com if Cognito Validation 
 is turned off) to me through the 'Contact' section of the 'About' page.
 
-Easiest method of running this program is via IDE.
 
 Diagram of project structure: 
 ![music-search-diagram](https://user-images.githubusercontent.com/46231784/132603816-02b42a6f-6d19-4ac1-9a84-b78c1f8a218e.png)
